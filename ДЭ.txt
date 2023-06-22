@@ -1,0 +1,73 @@
+АВТОРИЗАЦИЯ
+
+ Model.Model1 dbCon = DB.GetContext();
+            strPasswordUsers = par1.Text;
+            strLoginUsers = log1.Text;
+
+            if (!string.IsNullOrEmpty(strLoginUsers) && !string.IsNullOrEmpty(strPasswordUsers))
+            {
+                var findUsersAccount = dbCon.Table_1.Where(x => x.Login == strLoginUsers && x.Passvord == strPasswordUsers).FirstOrDefault();
+                if (findUsersAccount != null)
+                {
+                    MessageBox.Show("авторизация успешна");
+                }
+                else
+                {
+                    MessageBox.Show("неправильный логин или пароль");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Введите логин или пароль");
+            }
+
+РЕГИСТРАЦИЯ
+
+ public Window1()
+        {
+            InitializeComponent();
+        }
+        private string strLoginUsers;
+        private string strPasswordUsers;
+
+        private void reg2_Click(object sender, RoutedEventArgs e)
+        {
+            Model.Model1 dbCon = DB.GetContext();
+            strPasswordUsers = par2.Text;
+            strLoginUsers = log2.Text;
+
+            if (dbCon.Table_1.Count(x => x.Login==strLoginUsers)>0)
+            {
+                MessageBox.Show("есть такой");
+                return;
+            }
+            try
+            {
+                Model.Table_1 user = new Model.Table_1()
+                {
+                    Login = strLoginUsers,
+                    Passvord = strPasswordUsers
+                };
+                dbCon.Table_1.Add(user);
+                dbCon.SaveChanges();
+                MessageBox.Show("DOBAVLEN");
+            }
+            catch
+            {
+                MessageBox.Show("EROR");
+            }
+        }
+
+CONNECT
+
+class DB
+    {
+        public static Model.Model1 context;
+
+        public static Model.Model1 GetContext()
+        {
+            if (context == null)
+                context = new Model.Model1();
+            return context;
+        }
+    }
